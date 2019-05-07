@@ -1,12 +1,17 @@
 import React, { Component }  from 'react'
 import { Route, Link, withRouter } from 'react-router-dom'
 import './App.css'
+import decode from 'jwt-decode'
 
 import { loginUser, registerUser } from './services/api-helper'
 
+import AuthForm from './components/AuthForm'
+
 class App extends Component {
   state = {
-    authForm: {
+    loggedIn: false,
+    isRegistered: true,
+    authData: {
       username: '',
       password: ''
     }
@@ -15,56 +20,70 @@ class App extends Component {
   handleAuthChange = event => {
     const { name, value } = event.target
     this.setState(prevState => ({
-      authForm: {
-        ...prevState.authForm,
+      authData: {
+        ...prevState.authData,
         [name]: value
       }
     }))
   }
 
   handleRegister = async event => {
-    let { authForm }  = this.state
-    let resp = await registerUser(authForm)
-    console.log(`Registered in as ${authForm.username} with ${authForm.password}`)
-    await console.log(resp)
+    const resp = await registerUser(this.state.authData)
     this.handleLogin(event)
   }
 
   handleLogin = async event => {
-    let { authForm }  = this.state
-    let resp = await loginUser(authForm)
-    console.log(`Logged in as ${authForm.username} with ${authForm.password}`)
-    // localStorage.setItem('token', 'Bearer ' + token)
-    this.setState(prevState => ({
-      authForm: {
-        username: '',
-        password: ''
-      }
-    }))
+    const token = await loginUser(this.state.authData)
+    if (token.token) {
+      const userData = decode(token.token)
+      localStorage.setItem('token', token.token)
+      this.setState({
+        loggedIn: true,
+        authData: {
+          username: '',
+          password: ''
+        }
+      })
+    } else {
+      alert(token.error)
+      this.setState(prevState => ({
+        authData: {
+          ...prevState.authData,
+          password: ''
+        }
+      }))
+    }
   }
 
-  handle
+  handleLogout = () => {
+    localStorage.removeItem('token')
+    this.setState({loggedIn: false})
+  }
+
+  swapForm = () => {
+    this.setState(prevState => ({isRegistered: !prevState.isRegistered}))
+  }
+
+  componentDidMount() {
+    if (localStorage.getItem('token')) this.setState({logginIn: true})
+  }
 
   render() {
-    const { username, password } = this.state.authForm
     return (
       <div className="App">
         <header>
-          <h1>Youtube Together</h1>
+          <h1>Watch & Chat</h1>
         </header>
         <main>
-          <form onSubmit={e => {e.preventDefault(); this.handleRegister(e)}}>
-            <h2>Register</h2>
-            <input name="username" type="text" onChange={this.handleAuthChange} value={username} />
-            <input name="password" type="password" onChange={this.handleAuthChange} value={password} />
-            <button>Register</button>
-          </form>
-          <form onSubmit={e => {e.preventDefault(); this.handleLogin(e)}}>
-            <h2>Log In</h2>
-            <input name="username" type="text" onChange={this.handleAuthChange} value={username} />
-            <input name="password" type="password" onChange={this.handleAuthChange} value={password} />
-            <button>Log In</button>
-          </form>
+          <div className="auth-forms">
+            {this.state.isRegistered 
+            ?
+              <AuthForm title="Log In" handleSubmit={this.handleLogin} handleLogout={this.handleLogout} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
+            :
+              <AuthForm title="Register" handleSubmit={this.handleLogin} handleLogout={this.handleLogout} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
+            }
+          </div>
+          
         </main>
         <footer>
         </footer>

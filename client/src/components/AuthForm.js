@@ -6,16 +6,16 @@ const AuthForm = props => {
     <>
       {props.loggedIn
       ?
-        <button onClick={props.handleLogout}>Log out</button>
+        null
       :
       <>
         <form onSubmit={e => {e.preventDefault(); props.handleSubmit(e)}}>
           <h2>{props.title}</h2>
           <input name="username" type="text" onChange={props.handleChange} value={username} />
-          <input name="password" type="password" onChange={props.handleChange} value={password} />
+          <input name="password" type="password" onChange={props.handleChange} value={password} /> <br />
           <button>{props.title}</button>
         </form> <br />
-        <button onClick={props.swapForm}>{props.title === 'Log In' ? props.title : 'Log In'}</button>
+        <button onClick={props.swapForm}>{props.title === 'Log In' ? 'Register' : 'Log In' }</button>
       </>
       }
     </>

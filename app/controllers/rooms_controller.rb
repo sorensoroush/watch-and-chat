@@ -19,9 +19,8 @@ class RoomsController < ApplicationController
     @room = Room.new(room_params)
 
     if @room.save
-      # render json: @room, status: :created, location: @room
       ActionCable.server.broadcast 'rooms_channel', @room
-      head :ok
+      render json: @room, status: :created, location: @room
     else
       render json: @room.errors, status: :unprocessable_entity
     end
@@ -30,6 +29,7 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1
   def update
     if @room.update(room_params)
+      ActionCable.server.broadcast 'rooms_channel', @room
       render json: @room
     else
       render json: @room.errors, status: :unprocessable_entity
@@ -39,6 +39,7 @@ class RoomsController < ApplicationController
   # DELETE /rooms/1
   def destroy
     @room.destroy
+    ActionCable.server.broadcast 'rooms_channel', @room
   end
 
   private
@@ -49,6 +50,6 @@ class RoomsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def room_params
-      params.require(:room).permit(:title, :youtube_url)
+      params.require(:room).permit(:title, :youtube_url, :owner_id)
     end
 end

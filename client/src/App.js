@@ -74,7 +74,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.history)
     return (
       <div className="App">
         <header>
@@ -101,8 +100,8 @@ class App extends Component {
 
           }
           <Route exact path="/rooms" render={() => <RoomList />} />
-          <Route path="/rooms/new" render={() => <RoomForm />} />
-          <Route path="/rooms/:id" render={props => <ShowRoom {...props} />} />
+          <Route exact path="/rooms/new/" render={() => <RoomForm />} />
+          <Route strict exact path="/rooms/:id" render={props => <ShowRoom {...props} />} />
         </main>
         <footer>
         </footer>

@@ -35,7 +35,7 @@ class RoomList extends Component {
         */}
         <h2>List of Rooms</h2>
         <ul>
-          {rooms.length > 0 && rooms.map(room => <li><Link to="rooms/{room.id}">{room.title}</Link></li>)}
+          {rooms.length > 0 && rooms.map(room => <li><Link to={`/rooms/${room.id}`}>{room.title}</Link></li>)}
         </ul>
       </div>
     )

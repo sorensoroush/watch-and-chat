@@ -3,7 +3,7 @@ class AuthenticationController < ApplicationController
     @user = User.find_by_username(params[:username])
     puts @user
     if @user.authenticate(params[:password])
-      token = JsonWebToken.encode(user_id: @user.id, username: @user.username, room_owner: @user.room_owner)
+      token = JsonWebToken.encode(user_id: @user.id, username: @user.username)
       render json: { token: token }, status: :ok
     else
       render json: { error: 'unauthorized' }, status: :unauthorized

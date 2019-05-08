@@ -34,7 +34,7 @@ export const createRoom = roomData => {
     method: 'POST',
     body: JSON.stringify(roomData),
     headers: {
-      'Content-type': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': 'Header ' + localStorage.getItem('token')
     }
   }

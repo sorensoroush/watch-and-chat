@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import decode from 'jwt-decode'
 
 import { getRoom } from '../services/api-helper'
 import { ActionCable } from 'react-actioncable-provider'
@@ -6,8 +7,10 @@ import { ActionCable } from 'react-actioncable-provider'
 class ShowRoom extends Component {
   state = {
     room: {},
+    currentUser: {},
     users: [],
-    messages: []
+    messages: [],
+    messageToSubmit: ''
   }
 
   handleReceivedMessage = response => {
@@ -16,26 +19,43 @@ class ShowRoom extends Component {
     }))
   }
 
+  handleMessageChange = event => {
+    this.setState({messageToSubmit: event.target.value})
+  }
+
+  submitMessage = event => {
+
+  }
+
   componentDidMount = async () => {
     const room = await getRoom(this.props.match.params.id)
-    this.setState({room})
+    const currentUser = decode(localStorage.getItem('token'))
+    this.setState({
+      room,
+      currentUser
+    })
   }
 
   render() {
-    const { room } = this.state
+    const { room, currentUser } = this.state
+    console.log(currentUser)
     return (
       <>
         <ActionCable key={room.id} channel={{channel : 'MessagesChannel', room: room.id }} onReceived={this.handleReceivedMessage} />
         <h1>{this.state.room.title}</h1>
         <div className="users-list">
-          <h2>Users:</h2>
+          <h3>Users:</h3>
         </div>
-        <div className="chat-box">
-          <h2>Messages:</h2>
+        <div className="message-box">
+          <h3>Messages:</h3>
           <ul>
           {this.state.messages.map(message => <li key={message.id}>{message.content}</li>)}
           </ul>
         </div>
+        <form onSubmit={this.submitMessage}>
+          <input name="message" type="text" onChange={this.handleMessageChange} value={this.messageToSubmit} />
+          <button>Submit</button>
+        </form>
       </>
     )
   }

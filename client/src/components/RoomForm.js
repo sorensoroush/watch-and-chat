@@ -3,10 +3,13 @@ import { withRouter } from 'react-router-dom'
 
 import { createRoom } from '../services/api-helper'
 
+import decode from 'jwt-decode'
+
 class RoomForm extends Component {
   state = {
     formData: {
-      title: ''
+      title: '',
+      owner_id: decode(localStorage.getItem('token')).user_id
     }
   }
 
@@ -22,6 +25,7 @@ class RoomForm extends Component {
 
   handleSubmit = async () => {
     const room = await createRoom(this.state.formData)
+    console.log(room)
     this.props.history.replace('/rooms/' + room.id)
   }
 

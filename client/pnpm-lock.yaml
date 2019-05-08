@@ -1,6 +1,7 @@
 dependencies:
   jwt-decode: 2.2.0
   react: 16.8.6
+  react-actioncable-provider: 2.0.0
   react-dom: 16.8.6
   react-router-dom: 5.0.0
   react-scripts: 3.0.0
@@ -2115,6 +2116,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-jPTiwtOxaHNaAPg/dmrJ/beuzLRnXtB0kQPQ8JpotKJgTB6rX6c8mlf315941pyjBSaPg8NHXS9fhP4u17DpGA==
+  /actioncable/5.2.3:
+    dev: false
+    resolution:
+      integrity: sha512-KNdZHRDu92VDSO7SOEJS8Bf5G//LZZLz5e6m7mv8Wjafe9Svdp/DPJ/DpO7rJmPAlKcLAYwi/R7pNJ/VCHV1FQ==
   /address/1.0.3:
     dev: false
     engines:
@@ -3368,6 +3373,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-MJG9liiZ+ogc4TzUwuvbER1JRdgvUFSB5+VR/g5h82fGaIRWMWddtKBHi7/sVhfjQZ6SehlyhvQYrcYkaUIpLg==
+  /create-react-class/15.6.3:
+    dependencies:
+      fbjs: 0.8.17
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+    dev: false
+    resolution:
+      integrity: sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
   /create-react-context/0.2.3_prop-types@15.7.2:
     dependencies:
       fbjs: 0.8.17
@@ -8624,6 +8637,15 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha512-9esiElv1BrZoI3rCDuOuKCBRbuApGGaDPQfjSflGxdy4oyzqghxu6klEkkVIvBje+FF0BX9coEv8KqW6X/7njw==
+  /react-actioncable-provider/2.0.0:
+    dependencies:
+      actioncable: 5.2.3
+      create-react-class: 15.6.3
+      prop-types: 15.7.2
+      react: 16.3.2
+    dev: false
+    resolution:
+      integrity: sha512-gmUExYLJ9MyCXmXCSoRRwIeG9OIhrMzPlUTfCCJ9DCmxbu9DFxYv3xvkAC8yGx7BMtFABy59L67Ijsvvk0curA==
   /react-app-polyfill/1.0.0:
     dependencies:
       core-js: 3.0.1
@@ -8779,6 +8801,17 @@ packages:
       fsevents: 2.0.6
     resolution:
       integrity: sha512-F4HegoBuUKZvEzXYksQu05Y6vJqallhHkQUEL6M7OQ5rYLBQC/4MTK6km9ZZvEK9TqMy1XA8SSEJGJgTEr6bSQ==
+  /react/16.3.2:
+    dependencies:
+      fbjs: 0.8.17
+      loose-envify: 1.4.0
+      object-assign: 4.1.1
+      prop-types: 15.7.2
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha512-o5GPdkhciQ3cEph6qgvYB7LTOHw/GB0qRI6ZFNugj49qJCFfgHwVNjZ5u+b7nif4vOeMIOuYj3CeYe2IBD74lg==
   /react/16.8.6:
     dependencies:
       loose-envify: 1.4.0
@@ -10885,6 +10918,7 @@ packages:
 specifiers:
   jwt-decode: ^2.2.0
   react: ^16.8.6
+  react-actioncable-provider: ^2.0.0
   react-dom: ^16.8.6
   react-router-dom: ^5.0.0
   react-scripts: 3.0.0

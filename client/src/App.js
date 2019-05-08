@@ -8,6 +8,8 @@ import { loginUser, registerUser } from './services/api-helper'
 import AuthForm from './components/AuthForm'
 import RoomButtons from './components/RoomButtons'
 import RoomForm from './components/RoomForm'
+import RoomList from './components/RoomList'
+import ShowRoom from './components/ShowRoom'
 
 class App extends Component {
   state = {
@@ -98,8 +100,9 @@ class App extends Component {
           </>
 
           }
-          <Route exact path="/rooms" render={() => <h1>List of rooms</h1>} />
+          <Route exact path="/rooms" render={() => <RoomList />} />
           <Route path="/rooms/new" render={() => <RoomForm />} />
+          <Route path="/rooms/:id" render={props => <ShowRoom {...props} />} />
         </main>
         <footer>
         </footer>

@@ -1,5 +1,17 @@
 const baseUrl = 'http://localhost:3000'
 
+export const createRoom = roomData => {
+  const opts = {
+    method: 'POST',
+    body: JSON.stringify(roomData),
+    headers: {
+      'Content-type': 'application/json',
+      'Authorization': 'Header ' + localStorage.getItem('token')
+    }
+  }
+  return fetch(`${baseUrl}/rooms`, opts).then(resp => resp.json()).catch(e => e.message)
+}
+
 export const loginUser = loginData => {
   const opts = {
     method: 'POST',

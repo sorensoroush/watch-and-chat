@@ -7,6 +7,7 @@ import { loginUser, registerUser } from './services/api-helper'
 
 import AuthForm from './components/AuthForm'
 import RoomButtons from './components/RoomButtons'
+import RoomForm from './components/RoomForm'
 
 class App extends Component {
   state = {
@@ -30,7 +31,7 @@ class App extends Component {
 
   handleRegister = async event => {
     const resp = await registerUser(this.state.authData)
-    this.handleLogin(event)
+    await this.handleLogin(event)
   }
 
   handleLogin = async event => {
@@ -67,7 +68,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('token')) this.setState({logginIn: true})
+    if (localStorage.getItem('token')) this.setState({loggedIn: true})
   }
 
   render() {
@@ -88,9 +89,9 @@ class App extends Component {
             <div className="auth-forms">
               {this.state.isRegistered 
               ?
-                <AuthForm title="Log In" handleSubmit={this.handleLogin} handleLogout={this.handleLogout} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
+                <AuthForm title="Log In" handleSubmit={this.handleLogin} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
               :
-                <AuthForm title="Register" handleSubmit={this.handleLogin} handleLogout={this.handleLogout} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
+                <AuthForm title="Register" handleSubmit={this.handleRegister} handleChange={this.handleAuthChange} authData={this.state.authData} loggedIn={this.state.loggedIn} swapForm={this.swapForm} />
               }
             </div>
           }
@@ -98,7 +99,7 @@ class App extends Component {
 
           }
           <Route exact path="/rooms" render={() => <h1>List of rooms</h1>} />
-          <Route path="/rooms/new" render={() => <h1>Generating rooms...</h1>} />
+          <Route path="/rooms/new" render={() => <RoomForm />} />
         </main>
         <footer>
         </footer>

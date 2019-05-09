@@ -16,10 +16,18 @@ class RoomList extends Component {
     this.setState({rooms})
   }
 
-  handleReceivedRoom = room  => {
-    this.setState(prevState => ({
-      rooms: [...prevState.rooms, room]
-    }))
+  handleChangeRoom = resp => {
+    switch (resp.method) {
+      case 'PUT':
+      case 'DELETE':
+      case 'POST':
+        this.setState(prevState => ({
+          rooms: [...prevState.rooms, resp.room]
+        })) 
+        break
+      default: 
+        alert('Error: unknown broadcast')
+    } 
   }
 
   render() {
@@ -27,7 +35,7 @@ class RoomList extends Component {
     console.log(rooms)
     return (
       <div className="room-list">
-        <ActionCable channel={{ channel: 'RoomsChannel' }} onReceived={this.handleReceivedRoom} />
+        <ActionCable channel={{ channel: 'RoomsChannel' }} onReceived={this.handleChangeRoom} />
         {/*
         {this.state.rooms.length > 0 && 
           <Cable rooms={rooms} />

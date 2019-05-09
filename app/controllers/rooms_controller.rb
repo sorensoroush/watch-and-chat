@@ -19,7 +19,7 @@ class RoomsController < ApplicationController
     @room = Room.new(room_params)
 
     if @room.save
-      ActionCable.server.broadcast 'rooms_channel', @room
+      ActionCable.server.broadcast 'rooms_channel', { method: 'POST', room: @room }
       render json: @room, status: :created, location: @room
     else
       render json: @room.errors, status: :unprocessable_entity
@@ -29,7 +29,7 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1
   def update
     if @room.update(room_params)
-      ActionCable.server.broadcast 'rooms_channel', @room
+      ActionCable.server.broadcast 'rooms_channel', { method: 'PUT', room: @room }
       render json: @room
     else
       render json: @room.errors, status: :unprocessable_entity

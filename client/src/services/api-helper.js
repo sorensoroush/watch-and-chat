@@ -41,6 +41,31 @@ export const createRoom = roomData => {
   return fetch(`${baseUrl}/rooms`, opts).then(resp => resp.json()).catch(e => e.message)
 }
 
+export const updateRoom = roomData => {
+  const opts = {
+    method: 'PUT',
+    body: JSON.stringify(roomData),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Header ' + localStorage.getItem('token')
+    }
+  }
+  return fetch(`${baseUrl}/rooms/${roomData.id}`, opts).then(resp => resp.json()).catch(e => e.message)
+}
+
+export const deleteRoom = id => {
+  const opts = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Header ' + localStorage.getItem('token')
+    }
+  }
+  return fetch(`${baseUrl}/rooms/${id}`, opts).then(resp => resp.json()).catch(e => e.message)
+}
+
+
+
 export const loginUser = loginData => {
   const opts = {
     method: 'POST',

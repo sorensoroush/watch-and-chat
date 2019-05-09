@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import decode from 'jwt-decode'
+import { withRouter } from 'react-router-dom'
 
-import { getRoom } from '../services/api-helper'
+import { getRoom, updateRoom, deleteRoom } from '../services/api-helper'
 import { ActionCable } from 'react-actioncable-provider'
 
 class ShowRoom extends Component {
@@ -10,7 +11,8 @@ class ShowRoom extends Component {
     currentUser: {},
     users: [],
     messages: [],
-    messageToSubmit: ''
+    messageToSubmit: '',
+    editting: false
   }
 
   handleReceivedMessage = response => {
@@ -24,7 +26,25 @@ class ShowRoom extends Component {
   }
 
   submitMessage = event => {
+    
+  }
 
+  handleTitleEdit = async event => {
+    event.preventDefault()
+    const title = event.target.firstChild.value
+    this.setState(prevState => ({
+      room: {
+        ...prevState.room,
+        title
+      },
+      editting: false
+    }))
+    const room = await updateRoom(this.state.room)
+  }
+
+  handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this room?')) await deleteRoom(this.state.room.id)
+    this.props.history.replace('/rooms')
   }
 
   componentDidMount = async () => {
@@ -37,12 +57,23 @@ class ShowRoom extends Component {
   }
 
   render() {
-    const { room, currentUser } = this.state
+    const { room, currentUser, editting } = this.state
+    console.log(room)
     console.log(currentUser)
     return (
       <>
         <ActionCable key={room.id} channel={{channel : 'MessagesChannel', room: room.id }} onReceived={this.handleReceivedMessage} />
-        <h1>{this.state.room.title}</h1>
+        <h1>{room.title}</h1> <br/>
+        {room.owner_id === currentUser.user_id && (
+          editting ? 
+            <form onSubmit={this.handleTitleEdit}>
+              <input name="edit-title" type="text" defaultValue={room.title}/>
+              <button>Update</button>
+            </form>
+          :
+            (<> <button onClick={() => this.setState({editting: true})}>Edit</button> <br/> 
+            <button onClick={this.handleDelete}>Delete</button> </>)
+        )}
         <div className="users-list">
           <h3>Users:</h3>
         </div>
@@ -61,4 +92,4 @@ class ShowRoom extends Component {
   }
 }
 
-export default ShowRoom
+export default withRouter(ShowRoom)

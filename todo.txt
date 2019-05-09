@@ -1,4 +1,7 @@
 MVP:
+-Make it so that users that join the room appear in the users box
+-Make the messaging actually work
+-STYLE!
 
 Post MVP:
 -Break up authform better

@@ -1,0 +1,19 @@
+.App {
+  text-align: center;
+}
+
+header {
+  padding: 20px;
+}
+
+.auth-forms input {
+  margin: 5px;
+}
+
+.users-list, .message-box {
+  border: 1px solid black;
+  min-height: 100px;
+  margin: 10px;
+}
+
+

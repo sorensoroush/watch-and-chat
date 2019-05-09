@@ -19,7 +19,15 @@ class RoomList extends Component {
   handleChangeRoom = resp => {
     switch (resp.method) {
       case 'PUT':
+        this.setState(prevState => ({
+          rooms: prevState.rooms.map(room => resp.room.id === room.id ? resp.room : room)
+        })) 
+        break
       case 'DELETE':
+        this.setState(prevState => ({
+          rooms: prevState.rooms.filter(room => resp.room.id !== room.id)
+        })) 
+        break
       case 'POST':
         this.setState(prevState => ({
           rooms: [...prevState.rooms, resp.room]

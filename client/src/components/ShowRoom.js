@@ -32,7 +32,7 @@ class ShowRoom extends Component {
   handleTitleEdit = async event => {
     event.preventDefault()
     const title = event.target.firstChild.value
-    this.setState(prevState => ({
+    await this.setState(prevState => ({
       room: {
         ...prevState.room,
         title
@@ -40,6 +40,7 @@ class ShowRoom extends Component {
       editting: false
     }))
     const room = await updateRoom(this.state.room)
+    console.log(room)
   }
 
   handleDelete = async () => {

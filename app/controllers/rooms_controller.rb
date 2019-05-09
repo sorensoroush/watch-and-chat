@@ -39,7 +39,7 @@ class RoomsController < ApplicationController
   # DELETE /rooms/1
   def destroy
     @room.destroy
-    ActionCable.server.broadcast 'rooms_channel', @room
+    ActionCable.server.broadcast 'rooms_channel',  { method: 'DELETE', room: @room }
   end
 
   private

@@ -29,6 +29,18 @@ export const getRoomMessages = id => {
 }
 */
 
+export const createMessage = messageData => {
+  const opts = {
+    method: 'POST',
+    body: JSON.stringify(messageData),
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Header ' + localStorage.getItem('token')
+    }
+  }
+  return fetch(`${baseUrl}/messages`, opts).then(resp => resp.json()).catch(e => e.message)
+}
+
 export const createRoom = roomData => {
   const opts = {
     method: 'POST',

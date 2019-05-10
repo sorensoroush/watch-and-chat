@@ -6,6 +6,10 @@ header {
   padding: 20px;
 }
 
+ul {
+  list-style-type: none;
+}
+
 .auth-forms input {
   margin: 5px;
 }

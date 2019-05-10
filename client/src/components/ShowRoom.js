@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import decode from 'jwt-decode'
 import { withRouter } from 'react-router-dom'
 
-import { getRoom, updateRoom, deleteRoom } from '../services/api-helper'
-import { ActionCable } from 'react-actioncable-provider'
+import { getRoom, updateRoom, deleteRoom, createMessage } from '../services/api-helper'
+import { ActionCable, ActionCableConsumer } from 'react-actioncable-provider'
 
 class ShowRoom extends Component {
   state = {
@@ -15,9 +15,10 @@ class ShowRoom extends Component {
     editting: false
   }
 
-  handleReceivedMessage = response => {
+  handleReceivedMessage = message => {
+    console.log(message)
     this.setState(prevState => ({
-      messages: [...prevState.messages, response.message]
+      messages: [...prevState.messages, message]
     }))
   }
 
@@ -25,8 +26,15 @@ class ShowRoom extends Component {
     this.setState({messageToSubmit: event.target.value})
   }
 
-  submitMessage = event => {
-    
+  submitMessage = async event => {
+    event.preventDefault()
+    const msg = {
+      room_id: this.state.room.id,
+      user_id: this.state.currentUser.user_id,
+      content: this.state.messageToSubmit
+    }
+    await createMessage(msg)
+    this.setState({messageToSubmit: ''})
   }
 
   handleTitleEdit = async event => {
@@ -61,9 +69,9 @@ class ShowRoom extends Component {
     const { room, currentUser, editting } = this.state
     console.log(room)
     console.log(currentUser)
+    console.log(this.state.messages)
     return (
       <>
-        <ActionCable key={room.id} channel={{channel : 'MessagesChannel', room: room.id }} onReceived={this.handleReceivedMessage} />
         <h1>{room.title}</h1> <br/>
         {room.owner_id === currentUser.user_id && (
           editting ? 
@@ -78,14 +86,15 @@ class ShowRoom extends Component {
         <div className="users-list">
           <h3>Users:</h3>
         </div>
-        <div className="message-box">
-          <h3>Messages:</h3>
-          <ul>
-          {this.state.messages.map(message => <li key={message.id}>{message.content}</li>)}
-          </ul>
+        <div className="message-box"> <h3>Messages:</h3>
+          <ActionCableConsumer key={room.id} channel={{channel : 'MessagesChannel', room: room.id }} onReceived={this.handleReceivedMessage}>
+            <ul> 
+            {this.state.messages.map(message => <li key={message.message.id}><span style={{fontWeight: 'bold'}}>{message.username}: </span>{message.message.content}</li>)}
+            </ul>
+          </ActionCableConsumer>
         </div>
         <form onSubmit={this.submitMessage}>
-          <input name="message" type="text" onChange={this.handleMessageChange} value={this.messageToSubmit} />
+          <input name="message" type="text" onChange={this.handleMessageChange} value={this.state.messageToSubmit} />
           <button>Submit</button>
         </form>
       </>

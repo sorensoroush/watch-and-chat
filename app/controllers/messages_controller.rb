@@ -3,7 +3,10 @@ class MessagesController < ApplicationController
     message = Message.new(message_params)
     room = Room.find(message_params[:room_id])
     if message.save
-      MessagesChannel.broadcast_to room, message
+      username = User.find(message[:user_id])[:username]
+      broadcast_message = {username: username, message: message}
+      MessagesChannel.broadcast_to room, broadcast_message
+      puts message
       head :ok
     end
   end
@@ -11,6 +14,6 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    params.require(:message).permit(:text, :room_id, :user_id)
+    params.require(:message).permit(:content, :room_id, :user_id)
   end
 end
